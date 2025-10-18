@@ -1,10 +1,19 @@
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('main');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [reportDialogOpen, setReportDialogOpen] = useState(false);
 
   const stats = {
     noElectricity: 5,
@@ -61,7 +70,8 @@ const Index = () => {
               <Icon name="Radio" className="text-primary" size={28} />
               <h1 className="text-2xl font-semibold tracking-tight">Отключения</h1>
             </div>
-            <nav className="hidden md:flex gap-1">
+            <div className="flex items-center gap-4">
+              <nav className="hidden md:flex gap-1">
               <button
                 onClick={() => setActiveTab('main')}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -94,15 +104,155 @@ const Index = () => {
               >
                 Организации
               </button>
-            </nav>
+              </nav>
+              
+              {!isAuthenticated ? (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Icon name="User" size={16} className="mr-2" />
+                      Войти
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>{authMode === 'login' ? 'Вход' : 'Регистрация'}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" type="email" placeholder="your@email.com" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="password">Пароль</Label>
+                        <Input id="password" type="password" />
+                      </div>
+                      {authMode === 'register' && (
+                        <div className="space-y-2">
+                          <Label htmlFor="name">Имя</Label>
+                          <Input id="name" placeholder="Ваше имя" />
+                        </div>
+                      )}
+                      <Button 
+                        className="w-full" 
+                        onClick={() => setIsAuthenticated(true)}
+                      >
+                        {authMode === 'login' ? 'Войти' : 'Зарегистрироваться'}
+                      </Button>
+                      <button
+                        onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
+                        className="text-sm text-primary hover:underline w-full text-center"
+                      >
+                        {authMode === 'login' ? 'Создать аккаунт' : 'Уже есть аккаунт?'}
+                      </button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setIsAuthenticated(false)}
+                  >
+                    <Icon name="LogOut" size={16} className="mr-2" />
+                    Выйти
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
 
+      <div className="bg-primary/10 border-y border-primary/20">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <Icon name="AlertCircle" className="text-primary" size={24} />
+              <div>
+                <p className="font-semibold">Знаете об отключении?</p>
+                <p className="text-sm text-muted-foreground">Сообщите нам и помогите жителям</p>
+              </div>
+            </div>
+            <Dialog open={reportDialogOpen} onOpenChange={setReportDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="whitespace-nowrap">
+                  <Icon name="FileText" size={16} className="mr-2" />
+                  Сообщить об отключении
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-lg">
+                <DialogHeader>
+                  <DialogTitle>Сообщить об отключении</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="type">Тип отключения</Label>
+                    <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите тип" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="electricity">Электричество</SelectItem>
+                        <SelectItem value="water">Горячая вода</SelectItem>
+                        <SelectItem value="cold-water">Холодная вода</SelectItem>
+                        <SelectItem value="heating">Отопление</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="address">Адрес</Label>
+                    <Input id="address" placeholder="ул. Ленина, 45" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="description">Описание</Label>
+                    <Textarea 
+                      id="description" 
+                      placeholder="Опишите ситуацию..."
+                      rows={4}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="contact">Ваш телефон (необязательно)</Label>
+                    <Input id="contact" type="tel" placeholder="+7 (___) ___-__-__" />
+                  </div>
+                  <Button 
+                    className="w-full"
+                    onClick={() => {
+                      setReportDialogOpen(false);
+                    }}
+                  >
+                    Отправить заявление
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+      </div>
+
       <main className="container mx-auto px-4 py-8">
         {activeTab === 'main' && (
           <div className="space-y-8 animate-fade-in">
-            <div className="text-center space-y-2 py-8">
+            <Card className="p-6 bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center">
+                    <Icon name="Megaphone" className="text-primary" size={32} />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">Рекламное место</h3>
+                    <p className="text-sm text-muted-foreground">Разместите здесь свою рекламу</p>
+                  </div>
+                </div>
+                <Button variant="outline">
+                  Узнать подробнее
+                </Button>
+              </div>
+            </Card>
+
+            <div className="text-center space-y-2 py-4">
               <h2 className="text-4xl font-semibold tracking-tight">Аварийность по жалобам</h2>
               <p className="text-muted-foreground text-lg">Актуальная статистика отключений во Владивостоке</p>
             </div>
