@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
@@ -14,6 +15,7 @@ const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const stats = {
     noElectricity: 5,
@@ -67,6 +69,141 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild className="md:hidden">
+                  <Button variant="ghost" size="icon">
+                    <Icon name="Menu" size={24} />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-72">
+                  <SheetHeader>
+                    <SheetTitle className="flex items-center gap-2">
+                      <Icon name="Radio" className="text-primary" size={24} />
+                      Отключения
+                    </SheetTitle>
+                  </SheetHeader>
+                  <nav className="flex flex-col gap-2 mt-6">
+                    <button
+                      onClick={() => {
+                        setActiveTab('main');
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`px-4 py-3 rounded-lg text-left font-medium transition-colors ${
+                        activeTab === 'main' ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon name="Home" size={18} />
+                        Главная
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setActiveTab('outages');
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`px-4 py-3 rounded-lg text-left font-medium transition-colors ${
+                        activeTab === 'outages' ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon name="AlertTriangle" size={18} />
+                        Отключения
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setActiveTab('map');
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`px-4 py-3 rounded-lg text-left font-medium transition-colors ${
+                        activeTab === 'map' ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon name="Map" size={18} />
+                        Карта
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setActiveTab('orgs');
+                        setMobileMenuOpen(false);
+                      }}
+                      className={`px-4 py-3 rounded-lg text-left font-medium transition-colors ${
+                        activeTab === 'orgs' ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon name="Building2" size={18} />
+                        Организации
+                      </div>
+                    </button>
+                  </nav>
+                  
+                  <div className="mt-8 pt-6 border-t border-border">
+                    {!isAuthenticated ? (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button className="w-full">
+                            <Icon name="User" size={16} className="mr-2" />
+                            Войти
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          <DialogHeader>
+                            <DialogTitle>{authMode === 'login' ? 'Вход' : 'Регистрация'}</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-4 py-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="mobile-email">Email</Label>
+                              <Input id="mobile-email" type="email" placeholder="your@email.com" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="mobile-password">Пароль</Label>
+                              <Input id="mobile-password" type="password" />
+                            </div>
+                            {authMode === 'register' && (
+                              <div className="space-y-2">
+                                <Label htmlFor="mobile-name">Имя</Label>
+                                <Input id="mobile-name" placeholder="Ваше имя" />
+                              </div>
+                            )}
+                            <Button 
+                              className="w-full" 
+                              onClick={() => {
+                                setIsAuthenticated(true);
+                                setMobileMenuOpen(false);
+                              }}
+                            >
+                              {authMode === 'login' ? 'Войти' : 'Зарегистрироваться'}
+                            </Button>
+                            <button
+                              onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
+                              className="text-sm text-primary hover:underline w-full text-center"
+                            >
+                              {authMode === 'login' ? 'Создать аккаунт' : 'Уже есть аккаунт?'}
+                            </button>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    ) : (
+                      <Button 
+                        variant="outline" 
+                        className="w-full"
+                        onClick={() => {
+                          setIsAuthenticated(false);
+                          setMobileMenuOpen(false);
+                        }}
+                      >
+                        <Icon name="LogOut" size={16} className="mr-2" />
+                        Выйти
+                      </Button>
+                    )}
+                  </div>
+                </SheetContent>
+              </Sheet>
+              
               <Icon name="Radio" className="text-primary" size={28} />
               <h1 className="text-2xl font-semibold tracking-tight">Отключения</h1>
             </div>
