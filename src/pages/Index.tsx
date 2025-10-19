@@ -6,8 +6,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
@@ -15,7 +13,6 @@ const Index = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const stats = {
     noElectricity: 5,
@@ -65,208 +62,79 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
+      <header className="border-b border-border sticky top-0 z-50 bg-white/80 backdrop-blur-md">
+        <div className="container mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-                <SheetTrigger asChild className="md:hidden">
-                  <Button variant="ghost" size="icon">
-                    <Icon name="Menu" size={24} />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="w-72">
-                  <SheetHeader>
-                    <SheetTitle className="flex items-center gap-2">
-                      <Icon name="Radio" className="text-primary" size={24} />
-                      Отключения
-                    </SheetTitle>
-                  </SheetHeader>
-                  <nav className="flex flex-col gap-2 mt-6">
-                    <button
-                      onClick={() => {
-                        setActiveTab('main');
-                        setMobileMenuOpen(false);
-                      }}
-                      className={`px-4 py-3 rounded-lg text-left font-medium transition-colors ${
-                        activeTab === 'main' ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <Icon name="Home" size={18} />
-                        Главная
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setActiveTab('outages');
-                        setMobileMenuOpen(false);
-                      }}
-                      className={`px-4 py-3 rounded-lg text-left font-medium transition-colors ${
-                        activeTab === 'outages' ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <Icon name="AlertTriangle" size={18} />
-                        Отключения
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setActiveTab('map');
-                        setMobileMenuOpen(false);
-                      }}
-                      className={`px-4 py-3 rounded-lg text-left font-medium transition-colors ${
-                        activeTab === 'map' ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <Icon name="Map" size={18} />
-                        Карта
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setActiveTab('orgs');
-                        setMobileMenuOpen(false);
-                      }}
-                      className={`px-4 py-3 rounded-lg text-left font-medium transition-colors ${
-                        activeTab === 'orgs' ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <Icon name="Building2" size={18} />
-                        Организации
-                      </div>
-                    </button>
-                  </nav>
-                  
-                  <div className="mt-8 pt-6 border-t border-border">
-                    {!isAuthenticated ? (
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button className="w-full">
-                            <Icon name="User" size={16} className="mr-2" />
-                            Войти
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-md">
-                          <DialogHeader>
-                            <DialogTitle>{authMode === 'login' ? 'Вход' : 'Регистрация'}</DialogTitle>
-                          </DialogHeader>
-                          <div className="space-y-4 py-4">
-                            <div className="space-y-2">
-                              <Label htmlFor="mobile-email">Email</Label>
-                              <Input id="mobile-email" type="email" placeholder="your@email.com" />
-                            </div>
-                            <div className="space-y-2">
-                              <Label htmlFor="mobile-password">Пароль</Label>
-                              <Input id="mobile-password" type="password" />
-                            </div>
-                            {authMode === 'register' && (
-                              <div className="space-y-2">
-                                <Label htmlFor="mobile-name">Имя</Label>
-                                <Input id="mobile-name" placeholder="Ваше имя" />
-                              </div>
-                            )}
-                            <Button 
-                              className="w-full" 
-                              onClick={() => {
-                                setIsAuthenticated(true);
-                                setMobileMenuOpen(false);
-                              }}
-                            >
-                              {authMode === 'login' ? 'Войти' : 'Зарегистрироваться'}
-                            </Button>
-                            <button
-                              onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
-                              className="text-sm text-primary hover:underline w-full text-center"
-                            >
-                              {authMode === 'login' ? 'Создать аккаунт' : 'Уже есть аккаунт?'}
-                            </button>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    ) : (
-                      <Button 
-                        variant="outline" 
-                        className="w-full"
-                        onClick={() => {
-                          setIsAuthenticated(false);
-                          setMobileMenuOpen(false);
-                        }}
-                      >
-                        <Icon name="LogOut" size={16} className="mr-2" />
-                        Выйти
-                      </Button>
-                    )}
-                  </div>
-                </SheetContent>
-              </Sheet>
+            <div className="flex items-center gap-8">
+              <h1 className="text-xl font-semibold tracking-tight">Отключения</h1>
               
-              <Icon name="Radio" className="text-primary" size={28} />
-              <h1 className="text-2xl font-semibold tracking-tight">Отключения</h1>
-            </div>
-            <div className="flex items-center gap-4">
               <nav className="hidden md:flex gap-1">
-              <button
-                onClick={() => setActiveTab('main')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === 'main' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Главная
-              </button>
-              <button
-                onClick={() => setActiveTab('outages')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === 'outages' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Отключения
-              </button>
-              <button
-                onClick={() => setActiveTab('map')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === 'map' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Карта
-              </button>
-              <button
-                onClick={() => setActiveTab('orgs')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === 'orgs' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Организации
-              </button>
+                <button
+                  onClick={() => setActiveTab('main')}
+                  className={`px-4 py-2 text-sm font-medium transition-colors ${
+                    activeTab === 'main' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Главная
+                </button>
+                <button
+                  onClick={() => setActiveTab('outages')}
+                  className={`px-4 py-2 text-sm font-medium transition-colors ${
+                    activeTab === 'outages' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Отключения
+                </button>
+                <button
+                  onClick={() => setActiveTab('map')}
+                  className={`px-4 py-2 text-sm font-medium transition-colors ${
+                    activeTab === 'map' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Карта
+                </button>
+                <button
+                  onClick={() => setActiveTab('orgs')}
+                  className={`px-4 py-2 text-sm font-medium transition-colors ${
+                    activeTab === 'orgs' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  Организации
+                </button>
               </nav>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Input 
+                placeholder="Введите адрес" 
+                className="hidden md:block w-64 h-9 text-sm"
+              />
               
               {!isAuthenticated ? (
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <Icon name="User" size={16} className="mr-2" />
+                    <Button variant="outline" size="sm" className="hidden md:flex">
                       Войти
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-md">
                     <DialogHeader>
-                      <DialogTitle>{authMode === 'login' ? 'Вход' : 'Регистрация'}</DialogTitle>
+                      <DialogTitle className="text-xl font-semibold">
+                        {authMode === 'login' ? 'Вход' : 'Регистрация'}
+                      </DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                       <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email" className="text-sm font-medium">Email</Label>
                         <Input id="email" type="email" placeholder="your@email.com" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="password">Пароль</Label>
+                        <Label htmlFor="password" className="text-sm font-medium">Пароль</Label>
                         <Input id="password" type="password" />
                       </div>
                       {authMode === 'register' && (
                         <div className="space-y-2">
-                          <Label htmlFor="name">Имя</Label>
+                          <Label htmlFor="name" className="text-sm font-medium">Имя</Label>
                           <Input id="name" placeholder="Ваше имя" />
                         </div>
                       )}
@@ -278,7 +146,7 @@ const Index = () => {
                       </Button>
                       <button
                         onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
-                        className="text-sm text-primary hover:underline w-full text-center"
+                        className="text-sm text-muted-foreground hover:text-foreground w-full text-center transition-colors"
                       >
                         {authMode === 'login' ? 'Создать аккаунт' : 'Уже есть аккаунт?'}
                       </button>
@@ -286,255 +154,168 @@ const Index = () => {
                   </DialogContent>
                 </Dialog>
               ) : (
-                <div className="flex items-center gap-2">
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={() => setIsAuthenticated(false)}
-                  >
-                    <Icon name="LogOut" size={16} className="mr-2" />
-                    Выйти
-                  </Button>
-                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setIsAuthenticated(false)}
+                  className="hidden md:flex"
+                >
+                  Выйти
+                </Button>
               )}
             </div>
+          </div>
+
+          <div className="md:hidden mt-4">
+            <Input 
+              placeholder="Введите адрес" 
+              className="w-full h-9 text-sm"
+            />
           </div>
         </div>
       </header>
 
-      <div className="bg-primary/10 border-y border-primary/20">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Icon name="AlertCircle" className="text-primary" size={24} />
-              <div>
-                <p className="font-semibold">Знаете об отключении?</p>
-                <p className="text-sm text-muted-foreground">Сообщите нам и помогите жителям</p>
-              </div>
-            </div>
-            <Dialog open={reportDialogOpen} onOpenChange={setReportDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="whitespace-nowrap">
-                  <Icon name="FileText" size={16} className="mr-2" />
-                  Сообщить об отключении
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-lg">
-                <DialogHeader>
-                  <DialogTitle>Сообщить об отключении</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="type">Тип отключения</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите тип" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="electricity">Электричество</SelectItem>
-                        <SelectItem value="water">Горячая вода</SelectItem>
-                        <SelectItem value="cold-water">Холодная вода</SelectItem>
-                        <SelectItem value="heating">Отопление</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="address">Адрес</Label>
-                    <Input id="address" placeholder="ул. Ленина, 45" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="description">Описание</Label>
-                    <Textarea 
-                      id="description" 
-                      placeholder="Опишите ситуацию..."
-                      rows={4}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="contact">Ваш телефон (необязательно)</Label>
-                    <Input id="contact" type="tel" placeholder="+7 (___) ___-__-__" />
-                  </div>
-                  <Button 
-                    className="w-full"
-                    onClick={() => {
-                      setReportDialogOpen(false);
-                    }}
-                  >
-                    Отправить заявление
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </div>
-        </div>
-      </div>
-
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-6 py-12 max-w-7xl">
         {activeTab === 'main' && (
-          <div className="space-y-8 animate-fade-in">
-            <Card className="p-6 bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center">
-                    <Icon name="Megaphone" className="text-primary" size={32} />
+          <div className="space-y-12">
+            <div>
+              <h2 className="text-3xl font-semibold mb-8">Статистика</h2>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Card className="p-6 border border-border hover:shadow-sm transition-shadow">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Электричество</p>
+                      <p className="text-3xl font-semibold">{stats.noElectricity}</p>
+                    </div>
+                    <Icon name="Zap" size={20} className="text-muted-foreground" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Рекламное место</h3>
-                    <p className="text-sm text-muted-foreground">Разместите здесь свою рекламу</p>
+                </Card>
+                
+                <Card className="p-6 border border-border hover:shadow-sm transition-shadow">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Вода</p>
+                      <p className="text-3xl font-semibold">{stats.noWater}</p>
+                    </div>
+                    <Icon name="Droplet" size={20} className="text-muted-foreground" />
                   </div>
-                </div>
-                <Button variant="outline">
-                  Узнать подробнее
-                </Button>
+                </Card>
+                
+                <Card className="p-6 border border-border hover:shadow-sm transition-shadow">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Отопление</p>
+                      <p className="text-3xl font-semibold">{stats.noHeating}</p>
+                    </div>
+                    <Icon name="Flame" size={20} className="text-muted-foreground" />
+                  </div>
+                </Card>
+                
+                <Card className="p-6 border border-border hover:shadow-sm transition-shadow">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Всего домов</p>
+                      <p className="text-3xl font-semibold">{stats.total}</p>
+                    </div>
+                    <Icon name="Home" size={20} className="text-muted-foreground" />
+                  </div>
+                </Card>
               </div>
-            </Card>
-
-            <div className="text-center space-y-2 py-4">
-              <h2 className="text-4xl font-semibold tracking-tight">Аварийность по жалобам</h2>
-              <p className="text-muted-foreground text-lg">Актуальная статистика отключений во Владивостоке</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <Card className="p-6 hover:shadow-lg transition-shadow border-l-4 border-l-destructive">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Нет электричества</p>
-                    <p className="text-3xl font-semibold mt-2">{stats.noElectricity}</p>
-                    <p className="text-xs text-muted-foreground mt-1">домов</p>
-                  </div>
-                  <Icon name="Zap" className="text-destructive" size={40} />
-                </div>
-              </Card>
-
-              <Card className="p-6 hover:shadow-lg transition-shadow border-l-4 border-l-primary">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Нет горячей воды</p>
-                    <p className="text-3xl font-semibold mt-2">{stats.noWater}</p>
-                    <p className="text-xs text-muted-foreground mt-1">домов</p>
-                  </div>
-                  <Icon name="Droplet" className="text-primary" size={40} />
-                </div>
-              </Card>
-
-              <Card className="p-6 hover:shadow-lg transition-shadow border-l-4 border-l-muted">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Холодная вода</p>
-                    <p className="text-3xl font-semibold mt-2">0</p>
-                    <p className="text-xs text-muted-foreground mt-1">у всех есть</p>
-                  </div>
-                  <Icon name="Droplets" className="text-muted-foreground" size={40} />
-                </div>
-              </Card>
-
-              <Card className="p-6 hover:shadow-lg transition-shadow border-l-4 border-l-muted">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">Отопление</p>
-                    <p className="text-3xl font-semibold mt-2">{stats.noHeating}</p>
-                    <p className="text-xs text-muted-foreground mt-1">включается...</p>
-                  </div>
-                  <Icon name="Flame" className="text-muted-foreground" size={40} />
-                </div>
-              </Card>
-            </div>
-
-            <Card className="p-8">
-              <h3 className="text-xl font-semibold mb-6">График отключений за 30 дней</h3>
-              <div className="space-y-6">
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-medium">Электричество</span>
-                    <span className="text-sm text-muted-foreground">24 аварии</span>
-                  </div>
-                  <div className="h-16 flex items-end gap-1">
-                    {Array.from({ length: 30 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="flex-1 bg-destructive/20 rounded-t hover:bg-destructive/40 transition-colors"
-                        style={{ height: `${Math.random() * 100}%` }}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-medium">Вода</span>
-                    <span className="text-sm text-muted-foreground">156 аварий</span>
-                  </div>
-                  <div className="h-16 flex items-end gap-1">
-                    {Array.from({ length: 30 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="flex-1 bg-primary/20 rounded-t hover:bg-primary/40 transition-colors"
-                        style={{ height: `${Math.random() * 100}%` }}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-medium">Отопление</span>
-                    <span className="text-sm text-muted-foreground">0 аварий</span>
-                  </div>
-                  <div className="h-16 flex items-end gap-1">
-                    {Array.from({ length: 30 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="flex-1 bg-muted rounded-t"
-                        style={{ height: '5%' }}
-                      />
-                    ))}
-                  </div>
-                </div>
+            <div>
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-3xl font-semibold">Актуальные отключения</h2>
+                <Dialog open={reportDialogOpen} onOpenChange={setReportDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Icon name="Plus" size={16} className="mr-2" />
+                      Сообщить об отключении
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle className="text-xl font-semibold">Сообщить об отключении</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="address" className="text-sm font-medium">Адрес</Label>
+                        <Input id="address" placeholder="ул. Ленина, 45" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="description" className="text-sm font-medium">Описание</Label>
+                        <Textarea 
+                          id="description" 
+                          placeholder="Опишите проблему"
+                          className="min-h-24"
+                        />
+                      </div>
+                      <Button 
+                        className="w-full"
+                        onClick={() => setReportDialogOpen(false)}
+                      >
+                        Отправить
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
-            </Card>
+
+              <div className="space-y-3">
+                {outages.map(outage => (
+                  <Card key={outage.id} className="p-6 border border-border hover:shadow-sm transition-shadow">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start gap-4 flex-1">
+                        <div className="p-2 bg-muted rounded-lg">
+                          <Icon name={getTypeIcon(outage.type)} size={20} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="font-medium">{getTypeLabel(outage.type)}</h3>
+                            <Badge variant={outage.status === 'emergency' ? 'destructive' : 'secondary'} className="text-xs">
+                              {outage.status === 'emergency' ? 'Авария' : 'Плановое'}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-1">{outage.address}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {outage.houses} {outage.houses === 1 ? 'дом' : 'домов'} • {outage.start} - {outage.end}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 
         {activeTab === 'outages' && (
-          <div className="space-y-6 animate-fade-in">
+          <div className="space-y-8">
             <div>
-              <h2 className="text-3xl font-semibold tracking-tight">Текущие отключения</h2>
-              <p className="text-muted-foreground mt-2">Активные и плановые работы</p>
+              <h2 className="text-3xl font-semibold mb-2">Все отключения</h2>
+              <p className="text-muted-foreground">Полный список плановых и аварийных отключений</p>
             </div>
 
-            <div className="grid gap-4">
-              {outages.map((outage) => (
-                <Card key={outage.id} className="p-6 hover:shadow-lg transition-shadow">
+            <div className="space-y-3">
+              {outages.map(outage => (
+                <Card key={outage.id} className="p-6 border border-border hover:shadow-sm transition-shadow">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-4 flex-1">
-                      <div className={`p-3 rounded-lg ${outage.status === 'emergency' ? 'bg-destructive/10' : 'bg-primary/10'}`}>
-                        <Icon
-                          name={getTypeIcon(outage.type)}
-                          className={outage.status === 'emergency' ? 'text-destructive' : 'text-primary'}
-                          size={24}
-                        />
+                      <div className="p-2 bg-muted rounded-lg">
+                        <Icon name={getTypeIcon(outage.type)} size={20} />
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-semibold">{outage.address}</h3>
-                          <Badge variant={outage.status === 'emergency' ? 'destructive' : 'secondary'}>
+                          <h3 className="font-medium">{getTypeLabel(outage.type)}</h3>
+                          <Badge variant={outage.status === 'emergency' ? 'destructive' : 'secondary'} className="text-xs">
                             {outage.status === 'emergency' ? 'Авария' : 'Плановое'}
                           </Badge>
                         </div>
-                        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Icon name="Home" size={14} />
-                            {outage.houses} домов
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Icon name="Clock" size={14} />
-                            {outage.start} - {outage.end}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Icon name="Wrench" size={14} />
-                            {getTypeLabel(outage.type)}
-                          </span>
-                        </div>
+                        <p className="text-sm text-muted-foreground mb-1">{outage.address}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {outage.houses} {outage.houses === 1 ? 'дом' : 'домов'} • {outage.start} - {outage.end}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -545,82 +326,60 @@ const Index = () => {
         )}
 
         {activeTab === 'map' && (
-          <div className="space-y-6 animate-fade-in">
+          <div className="space-y-8">
             <div>
-              <h2 className="text-3xl font-semibold tracking-tight">Карта отключений</h2>
-              <p className="text-muted-foreground mt-2">Интерактивная карта Владивостока</p>
+              <h2 className="text-3xl font-semibold mb-2">Карта отключений</h2>
+              <p className="text-muted-foreground">Визуализация отключений на карте города</p>
             </div>
-
-            <Card className="p-8">
-              <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-                <div className="text-center space-y-4">
-                  <Icon name="MapPin" className="text-muted-foreground mx-auto" size={64} />
-                  <div>
-                    <p className="text-lg font-medium text-muted-foreground">Карта в разработке</p>
-                    <p className="text-sm text-muted-foreground mt-2">Здесь будет интерактивная карта с отметками отключений</p>
-                  </div>
+            
+            <Card className="p-12 border border-border">
+              <div className="flex flex-col items-center justify-center text-center py-12">
+                <div className="p-4 bg-muted rounded-full mb-4">
+                  <Icon name="Map" size={32} className="text-muted-foreground" />
                 </div>
+                <h3 className="text-xl font-semibold mb-2">Карта в разработке</h3>
+                <p className="text-muted-foreground max-w-md">
+                  Интерактивная карта отключений появится в ближайшее время
+                </p>
               </div>
             </Card>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-4 h-4 rounded-full bg-destructive" />
-                  <span className="text-sm font-medium">Электричество - 5 точек</span>
-                </div>
-              </Card>
-              <Card className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-4 h-4 rounded-full bg-primary" />
-                  <span className="text-sm font-medium">Вода - 790 точек</span>
-                </div>
-              </Card>
-              <Card className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-4 h-4 rounded-full bg-muted" />
-                  <span className="text-sm font-medium">Отопление - 0 точек</span>
-                </div>
-              </Card>
-            </div>
           </div>
         )}
 
         {activeTab === 'orgs' && (
-          <div className="space-y-6 animate-fade-in">
+          <div className="space-y-8">
             <div>
-              <h2 className="text-3xl font-semibold tracking-tight">Управляющие организации</h2>
-              <p className="text-muted-foreground mt-2">Контакты служб и количество обслуживаемых домов</p>
+              <h2 className="text-3xl font-semibold mb-2">Организации</h2>
+              <p className="text-muted-foreground">Управляющие компании и поставщики услуг</p>
             </div>
 
-            <div className="grid gap-4">
-              {organizations.map((org) => (
-                <Card key={org.id} className="p-6 hover:shadow-lg transition-shadow">
-                  <div className="space-y-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <h3 className="text-lg font-semibold">{org.name}</h3>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          Обслуживает {org.houses} {org.houses === 0 ? 'домов' : org.houses === 1 ? 'дом' : 'дома'}
-                        </p>
-                      </div>
-                      <Icon name="Building2" className="text-muted-foreground" size={32} />
+            <div className="space-y-3">
+              {organizations.map(org => (
+                <Card key={org.id} className="p-6 border border-border hover:shadow-sm transition-shadow">
+                  <div className="flex items-start gap-4">
+                    <div className="p-2 bg-muted rounded-lg">
+                      <Icon name="Building2" size={20} />
                     </div>
-                    <div className="flex flex-wrap gap-4 pt-4 border-t border-border">
-                      <a
-                        href={`tel:${org.phone}`}
-                        className="flex items-center gap-2 text-sm text-primary hover:underline"
-                      >
-                        <Icon name="Phone" size={16} />
-                        {org.phone}
-                      </a>
-                      <a
-                        href={`mailto:${org.email}`}
-                        className="flex items-center gap-2 text-sm text-primary hover:underline"
-                      >
-                        <Icon name="Mail" size={16} />
-                        {org.email}
-                      </a>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium mb-3">{org.name}</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <p className="text-muted-foreground mb-1">Домов в обслуживании</p>
+                          <p className="font-medium">{org.houses}</p>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground mb-1">Телефон</p>
+                          <a href={`tel:${org.phone}`} className="font-medium hover:underline">
+                            {org.phone}
+                          </a>
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground mb-1">Email</p>
+                          <a href={`mailto:${org.email}`} className="font-medium hover:underline">
+                            {org.email}
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </Card>
@@ -630,20 +389,38 @@ const Index = () => {
         )}
       </main>
 
-      <footer className="border-t border-border mt-16">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground">
-              © 2025 Отключения Владивостока. Информационный сервис
-            </p>
-            <div className="flex items-center gap-4">
-              <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                О проекте
-              </a>
-              <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Контакты
-              </a>
+      <footer className="border-t border-border mt-24">
+        <div className="container mx-auto px-6 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <h3 className="font-semibold mb-4">О сервисе</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Информация о плановых и аварийных отключениях воды, света и отопления во Владивостоке
+              </p>
             </div>
+            <div>
+              <h3 className="font-semibold mb-4">Контакты</h3>
+              <p className="text-sm text-muted-foreground">
+                Email: info@outages.ru<br />
+                Телефон: +7 (423) 240-00-00
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4">Полезные ссылки</h3>
+              <div className="space-y-2">
+                <a href="#" className="text-sm text-muted-foreground hover:text-foreground block transition-colors">
+                  Пользовательское соглашение
+                </a>
+                <a href="#" className="text-sm text-muted-foreground hover:text-foreground block transition-colors">
+                  Политика конфиденциальности
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="mt-12 pt-8 border-t border-border text-center">
+            <p className="text-sm text-muted-foreground">
+              © 2025 Отключения. Все права защищены
+            </p>
           </div>
         </div>
       </footer>
